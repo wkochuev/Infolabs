@@ -15,4 +15,28 @@
 ### *Доп.функции, которые возможно будут реализованы:* 
 #### система комментариев, рейтинг арендодателя/арендатора, удобный интерфейс(GUI), проверка на существование помещения, возможность зарегистрироваться в системе, система категорий.
 
-bLDBJiCm5Dpx55RtlGBgLQpKb4Z1gM8N911IsmKBG6h57X0t25L3qvQcLtY-4MFJvaTPa4NaZ6VclR5VUjg8n8mk8nR9SyDDp9DmS65uFqnaOC9OCH6OEE4TUg6CKbhOAHLsJ3cjgA05a1tjx2EjEUq1REtJSGF4p7rtkD1SnKgCu1FUb7vpk6HGBpqLdfue4gdw0emJlEB0hMmzEmQVCTUkK8D8Gl8Cweg-yFw4iB0JY78ERQiYfPrRnl6Cj0o4Tj8te10uiPtQCOV7XtsmCoJQUd5EQr_wAfJNg6vQ-bSuRq3DQSF1JayPP1wizvDvIsUNI3sCbPRixd-9wcSp-vNgtSkN_hQEzPjDsTaVJGM954QUIDe-AIpty9aWlajTdOCRXzgHwM4KQeDybTMyCLQflNVz_5pmOMYg-Ubspyf9gf1gQfgOduro1RJHGtsZbfELTgL0cGROk2dMmuRxWxu1
+@startuml
+left to right direction
+actor "Неавторизованный пользователь" as nonautoriz
+actor "Арендатор" as arendator
+actor "Арендодатель" as arendodat
+
+rectangle "Возможности арендатора"{
+    usecase "Просмотр объявлений" as viewrent
+    usecase "Отклик на объявление об аренде" as rentresponse
+}
+rectangle "Возможности арендодателя"{
+    usecase "Создание объявления об аренде" as createrent
+    usecase "Просмотр списка откликов" as viewresplist
+}
+usecase "Авторизация" as autoriz
+nonautoriz-->autoriz
+autoriz-->arendator
+autoriz-->arendodat
+arendodat-->viewresplist
+arendodat-->createrent
+
+arendator-->viewrent
+arendator-->rentresponse
+
+@enduml
