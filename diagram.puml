@@ -1,13 +1,25 @@
 @startuml
 left to right direction
-skinparam packageStyle rectangle
-actor "Пользователь" as User
-package "Система" {
-    usecase "Вход в систему" as UC_Login
-    usecase "Регистрация" as UC_Register
-    usecase "Сброс пароля" as UC_Reset
+actor "Неавторизованный пользователь" as nonautoriz
+actor "Арендатор" as arendator
+actor "Арендодатель" as arendodat
+
+rectangle "Возможности арендатора"{
+    usecase "Просмотр объявлений" as viewrent
+    usecase "Отклик на объявление об аренде" as rentresponse
 }
-User --> UC_Login
-User --> UC_Register
-User --> UC_Reset
+rectangle "Возможности арендодателя"{
+    usecase "Создание объявления об аренде" as createrent
+    usecase "Просмотр списка откликов" as viewresplist
+}
+usecase "Авторизация" as autoriz
+nonautoriz-->autoriz
+autoriz-->arendator
+autoriz-->arendodat
+arendodat-->viewresplist
+arendodat-->createrent
+
+arendator-->viewrent
+arendator-->rentresponse
+
 @enduml
