@@ -13,7 +13,8 @@ def selected(event):
     if selection=='арендатор':
         method_arendat()
     elif selection=='арендодатель':
-        method_arendodat()
+        pass
+        #method_arendodat()
 
 def method_arendat():
     login_lbl=Label(
