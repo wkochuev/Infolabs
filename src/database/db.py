@@ -10,7 +10,7 @@ def create_tables(db_name: str = "arendas.db"):
     cursor = conn.cursor()
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS Arendator (
+        CREATE TABLE IF NOT EXISTS Arendat (
             ID INTEGER PRIMARY KEY,
             Name TEXT NOT NULL
         )
