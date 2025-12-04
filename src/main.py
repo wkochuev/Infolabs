@@ -16,6 +16,7 @@ def main():
     while True:
         print("\nВыберите действие:")
         print("1 - Показать все объявления")
+        print("2 - Сохранить таблицу Арендодателей в 3 разных файла")
         print("0 - Выход")
         choice = input("Ваш выбор: ")
 
@@ -26,6 +27,9 @@ def main():
                 arendodat = repo.get_arendodat(renta.arendodat_id)
                 arendat = repo.get_arendat(renta.arendat_id)
                 print(f"{renta.id}: {renta.content} (Автор объявления: {arendodat.name}, Отозвался: {arendat.name})")
+
+        if choice=="2":
+            repo.save_data()
 
         elif choice == "0":
             print("Выход из программы...")
