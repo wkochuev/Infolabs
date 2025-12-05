@@ -5,6 +5,7 @@ import os
 DB_FILE = "arendas.db"
 
 def main():
+    role="Guest"
     # Если базы нет, создаем таблицы и вставляем тестовые данные
     if not os.path.exists(DB_FILE):
         create_tables(DB_FILE)
@@ -16,7 +17,11 @@ def main():
     while True:
         print("\nВыберите действие:")
         print("1 - Показать все объявления")
-        print("2 - Сохранить таблицу Арендодателей в 3 разных файла")
+        print("2 - Экспорт таблицы Арендодателей в 4 разных файла")
+        if role=="Arendat":
+            print("3 - Откликнуться на заявку")
+        if role=="Arendodat":
+            print("3 - Создать объявление")
         print("0 - Выход")
         choice = input("Ваш выбор: ")
 
