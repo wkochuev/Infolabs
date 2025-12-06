@@ -27,13 +27,16 @@ def main():
 
         if choice == "1":
             rents = repo.get_all_rents()
+
             print("\nСписок всех объявлений:")
             for renta in rents:
-                arendodat = repo.get_arendodat(renta.arendodat_id)
-                arendat = repo.get_arendat(renta.arendat_id)
-                print(f"{renta.id}: {renta.content} (Автор объявления: {arendodat.name}, Отозвался: {arendat.name})")
+                room = repo.get_room(renta.room_id)
+                arendodat = repo.get_arendodat(room.arendodat_id)
+                resp= repo.get_response(renta.id)
+                arendat=repo.get_arendat(resp.arendat_id)
+                print(f"{renta.id}: {renta.content} [Стоимость: {renta.cost}] [Адрес: {room.adress}] (Автор объявления: {arendodat.name}, Отозвался: {arendat.name})")
 
-        if choice=="2":
+        elif choice=="2":
             repo.save_data()
 
         elif choice == "0":

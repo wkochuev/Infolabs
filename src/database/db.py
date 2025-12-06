@@ -24,15 +24,34 @@ def create_tables(db_name: str = "arendas.db"):
     ''')
 
     cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Room (
+            ID INTEGER PRIMARY KEY,
+            Adress TEXT NOT NULL,
+            Arendodat_ID INTEGER,
+            FOREIGN KEY (Arendodat_ID) REFERENCES Arendodat(ID)
+        )
+    ''')
+
+    cursor.execute('''
         CREATE TABLE IF NOT EXISTS Rent (
             ID INTEGER PRIMARY KEY,
             Content TEXT NOT NULL,
-            Arendodat_ID INTEGER,
+            Cost INTEGER,
+            Room_ID INTEGER,
+            FOREIGN KEY (Room_ID) REFERENCES Room(ID)
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Response (
+            ID INTEGER PRIMARY KEY,
             Arendat_ID INTEGER,
-            FOREIGN KEY (Arendodat_ID) REFERENCES Arendodat(ID)
+            Rent_ID INTEGER,
+            FOREIGN KEY (Rent_ID) REFERENCES Rent(ID),
             FOREIGN KEY (Arendat_ID) REFERENCES Arendat(ID)
         )
     ''')
+
 
     conn.commit()
     conn.close()
@@ -68,16 +87,39 @@ def insert_sample_data(db_name: str = "arendas.db"):
         cursor.executemany("INSERT INTO Arendat (Name) VALUES (?)", arendat)
         print("Добавлены арендаторы.")
 
+
+    # Проверка, есть ли комнаты
+    cursor.execute("SELECT COUNT(*) FROM Room")
+    if cursor.fetchone()[0] == 0:
+        adress = [
+            ("ул.Шредингера, д.020", 1),
+            ("Штат Оригами", 3),
+            ("Космос", 5)
+        ]
+        cursor.executemany("INSERT INTO Room (Adress, Arendodat_ID) VALUES (?, ?)", adress)
+        print("Добавлены комнаты.")
+
     # Проверка, есть ли объявления
     cursor.execute("SELECT COUNT(*) FROM Rent")
     if cursor.fetchone()[0] == 0:
         rent = [
-            ("Сдаю комнату в Сормово", 2, 1),
-            ("Сдаю корабль с беззащитными членами экипажа.",5, 2),
-            ("Сдаю пиццерию на ночное время, охрана не помешает!",3, 5)
+            ("Сдаю комнату в Сормово", 9999, 1),
+            ("Сдаю корабль с беззащитными членами экипажа.", 666, 3),
+            ("Сдаю пиццерию на ночное время, охрана не помешает!", 5000, 2)
         ]
-        cursor.executemany("INSERT INTO Rent (Content, Arendodat_ID, Arendat_ID) VALUES (?, ?, ?)", rent)
+        cursor.executemany("INSERT INTO Rent (Content, Cost, Room_ID) VALUES (?, ?, ?)", rent)
         print("Добавлены объявления.")
+
+    # Проверка, есть ли ответы на заявки
+    cursor.execute("SELECT COUNT(*) FROM Response")
+    if cursor.fetchone()[0] == 0:
+        response = [
+            (1, 1),
+            (2, 2),
+            (5, 3)
+        ]
+        cursor.executemany("INSERT INTO Response (Arendat_ID, Rent_ID) VALUES (?, ?)", response)
+        print("Добавлены ответы на заявки.")
 
 
     conn.commit()
