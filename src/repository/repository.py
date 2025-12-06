@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 import os
 from pathlib import Path
 
-from models.models import Arendodat, Arendat, Rent
+from models.models import Arendodat, Arendat, Rent, Room, Response
 
 
 class Repository:
@@ -28,10 +28,24 @@ class Repository:
             return Arendodat(id=row["ID"], name=row["Name"])
         return None
     
+    def get_room(self, room_id: int):
+        self.cursor.execute("SELECT ID, Adress, Arendodat_ID FROM Room WHERE ID = ?", (room_id,))
+        row = self.cursor.fetchone()
+        if row:
+            return Room(id=row["ID"], adress=row["Adress"], arendodat_id=row["Arendodat_ID"])
+        return None
+    
+    def get_response(self, response_id: int):
+        self.cursor.execute("SELECT ID, Arendat_ID, Rent_ID FROM Response WHERE Rent_ID = ?", (response_id,))
+        row = self.cursor.fetchone()
+        if row:
+            return Response(id=row["ID"], arendat_id=row["Arendat_ID"], rent_id=row["Rent_ID"])
+        return None
+    
     def get_all_rents(self):
-        self.cursor.execute("SELECT ID, Content, Arendodat_ID, Arendat_ID FROM Rent")
+        self.cursor.execute("SELECT ID, Content, Cost, Room_ID FROM Rent")
         rows = self.cursor.fetchall()
-        return [Rent(id=row["ID"], content=row["Content"], arendodat_id=row["Arendodat_ID"], arendat_id=row["Arendat_ID"]) for row in rows]
+        return [Rent(id=row["ID"], content=row["Content"], cost=row["Cost"], room_id=row["Room_ID"]) for row in rows]
 
     def reg_arendodat(self, name:str):
         self.cursor.execute("INSERT INTO Arendodat (Name) VALUES (?)", (name))
